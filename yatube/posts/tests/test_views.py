@@ -92,6 +92,20 @@ class PostViewTests(TestCase):
         self._check_post_list(response.context["page_obj"])
         self._assert_equal_groups(response.context["group"], group)
 
+    def test_group_list_empty_post_list_for_new_group(self):
+        new_group = Group.objects.create(
+            title="new title",
+            slug="new_slug",
+            description="new description",
+        )
+
+        response = self.auth_client.get(
+            reverse("posts:group_list", kwargs={"slug": new_group.slug})
+        )
+
+        self.assertEqual(len(response.context["page_obj"]), 0)
+        self._assert_equal_groups(response.context["group"], new_group)
+
     def test_group_list_first_page_posts_count(self):
         group = PostViewTests.group
         response = self.auth_client.get(

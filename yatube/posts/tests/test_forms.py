@@ -1,6 +1,5 @@
 from http import HTTPStatus
 from django.contrib.auth import get_user_model
-from django.shortcuts import redirect
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -72,8 +71,8 @@ class PostFormTests(TestCase):
         self.assertRedirects(
             response,
             reverse("users:login") + "?next=" + path,
-            status_code=302,
-            target_status_code=200,
+            status_code=HTTPStatus.FOUND,
+            target_status_code=HTTPStatus.OK,
         )
 
     def test_edit_post_author_client(self):
@@ -108,8 +107,8 @@ class PostFormTests(TestCase):
         self.assertRedirects(
             response,
             reverse("users:login") + "?next=" + path,
-            status_code=302,
-            target_status_code=200,
+            status_code=HTTPStatus.FOUND,
+            target_status_code=HTTPStatus.OK,
         )
 
     def test_edit_post_redirect_authorized_not_author(self):
@@ -125,6 +124,6 @@ class PostFormTests(TestCase):
         self.assertRedirects(
             response,
             reverse("posts:post_detail", kwargs={"post_id": post.id}),
-            status_code=302,
-            target_status_code=200,
+            status_code=HTTPStatus.FOUND,
+            target_status_code=HTTPStatus.OK,
         )
